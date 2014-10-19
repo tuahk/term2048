@@ -42,7 +42,7 @@ check-versions: deps
 	$(BINPREFIX)tox
 
 stylecheck: deps
-	$(BINPREFIX)pep8 $(SRC)
+	$(BINPREFIX)prospector $(SRC)
 
 covercheck: deps
 	$(BINPREFIX)coverage run --source=term2048 tests/test.py

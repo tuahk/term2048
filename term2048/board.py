@@ -1,4 +1,9 @@
 # -*- coding: UTF-8 -*-
+
+"""
+Board-related things
+"""
+
 import random
 
 # PY3 compat
@@ -106,16 +111,15 @@ class Board(object):
 
     def getEmptyCells(self):
         """return a (x, y) pair for each empty cell"""
-        return [(x, y)
-                for x in self.__size_range
-                for y in self.__size_range if self.getCell(x, y) == 0]
+        rg = self.__size_range
+        return [(x, y) for x in rg for y in rg if self.getCell(x, y) == 0]
 
     def __collapseLineOrCol(self, line, d):
         """
         Merge tiles in a line or column according to a direction and return a
         tuple with the new line and the score for the move on this line
         """
-        if (d == Board.LEFT or d == Board.UP):
+        if d in (Board.LEFT, Board.UP):
             inc = 1
             rg = xrange(0, self.__size-1, inc)
         else:
