@@ -28,6 +28,9 @@ def get_state(board):
     s = range(board.size())
     return [ board.getCell(x,y) for y in s for x in s]
 
+def get_state_string(board):
+    return ''.join(get_state(board)) 
+
 def largest_tile(board):
     """ Returns the value of the largest tile at board """
     return max(get_state(board))
@@ -57,6 +60,8 @@ def run_gui(ai_function, **kws):
 
 def run(ai_function, times=1,  **kws):
     results = []
+    states_encountered = {}
+    prev_states = 0
     while(times > 0):
         score = 0
         moves = 0
@@ -64,9 +69,20 @@ def run(ai_function, times=1,  **kws):
         while True:
             if board.won() or not board.canMove():
                 break
+            # For counting number of visited states
+            state = str(get_state(board))
+            if state in states_encountered:
+                states_encountered[state] += 1
+            else:
+                states_encountered[state] = 1
+            
             move = ai_function(board,score)
             score += board.move(move)
             moves += 1
+
+        states = len(states_encountered)
+        print(states, states - prev_states)
+        prev_states = states 
 
         results.append((moves, largest_tile(board), score))
         times -= 1
@@ -75,7 +91,7 @@ def run(ai_function, times=1,  **kws):
 
 startTime = time.time() # start the timer
 
-results = run(players.biasRandom_ai,10000, size=4)
+results = run(random_ai,1000, size=4)
 
 print('Highscore =    ' + str(max([res[1] for res in results] )))
 print_to_file(results)  # print to file
