@@ -62,6 +62,7 @@ def run(ai_function, times=1,  **kws):
     results = []
     states_encountered = {}
     prev_states = 0
+    f = open('states.csv', 'w')
     while(times > 0):
         score = 0
         moves = 0
@@ -81,12 +82,12 @@ def run(ai_function, times=1,  **kws):
             moves += 1
 
         states = len(states_encountered)
-        print(states, states - prev_states)
+        print(states,',', states - prev_states, file=f)
         prev_states = states 
-
         results.append((moves, largest_tile(board), score))
         times -= 1
 
+    f.close()
     return results
 
 startTime = time.time() # start the timer
