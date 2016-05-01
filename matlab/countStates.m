@@ -3,14 +3,19 @@ clc;
 
 format shortG
 
-filename = '/Users/Ajrok/Dropbox/ML-project/states/states_512_1M_r2.csv';
+filename = '/Users/Ajrok/Documents/MATLAB/MachineLearning/Project/term2048/term2048/states.csv';
 M = csvread(filename,0,0);
 
-goal = 512
+filename = '/Users/Ajrok/Documents/MATLAB/MachineLearning/Project/term2048/term2048/results.csv';
+N = csvread(filename,1,0);
+
+goal = 8
 runs = length(M)
 numberOfStates = M(end,1)
 possibleStates = 16*log2(goal) + log2(goal)^16
 discoveredPart = numberOfStates/possibleStates
+
+M(:,2) = M(:,2)./N(:,1);
 
 %% Analyse All
 initSize = 1000;    % the size of data we fit linear function to
@@ -32,18 +37,15 @@ y = filter((1/windowSize)*ones(1,windowSize),1,M(:,2));
 X2 = linspace(windowSize,runs,runs-windowSize+1);
 Y2 = y(windowSize:end);
 
-F2 = fit(X1',M(:,2),'poly1')
-Y3 = F2.p1 .* X1 + F2.p2;
-
-expectedNumberOfRuns = -F2.p2/F2.p1
-
 figure(4)
 clf
 hold on
 plot(X1,M(:,2))
 plot(X2,Y2,'LineWidth',4)
-plot(X1,Y3,'--','LineWidth',1)
-legend('update','moving average','linear fit')
+legend('update','moving average')
 hold off
 xlabel('run')
 ylabel('number of new states')
+
+figure(5)
+semilogy(X2,Y2)
