@@ -9,7 +9,7 @@ M = csvread(filename,0,0);
 filename = '/Users/Ajrok/Documents/MATLAB/MachineLearning/Project/term2048/term2048/results.csv';
 N = csvread(filename,1,0);
 
-goal = 8
+goal = 16
 runs = length(M)
 numberOfStates = M(end,1)
 possibleStates = 16*log2(goal) + log2(goal)^16
@@ -20,12 +20,11 @@ M(:,2) = M(:,2)./N(:,1);
 %% Analyse All
 initSize = 1000;    % the size of data we fit linear function to
 X1 = linspace(1,runs,runs);
-F1 = fit(X1(1:initSize)',M(1:initSize,1),'poly1')
-Y1 = F1.p1 .* X1 + F1.p2;
+Y1 = cumsum(N(:,1));
 
 figure(3)
 plot(X1,M(:,1),'-',X1,Y1,'-')
-legend('number of states','linear fit','Location','northwest')
+legend('number of new states','number of states','Location','northwest')
 xlabel('runs')
 ylabel('number of states')
 
