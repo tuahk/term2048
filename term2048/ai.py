@@ -29,7 +29,7 @@ def get_state(board):
     return [ board.getCell(x,y) for y in s for x in s]
 
 def get_state_string(board):
-    return ''.join(get_state(board)) 
+    return ''.join(get_state(board))
 
 def largest_tile(board):
     """ Returns the value of the largest tile at board """
@@ -76,14 +76,14 @@ def run(ai_function, times=1,  **kws):
                 states_encountered[state] += 1
             else:
                 states_encountered[state] = 1
-            
+
             move = ai_function(board,score)
             score += board.move(move)
             moves += 1
 
         states = len(states_encountered)
         print(states,',', states - prev_states, file=f)
-        prev_states = states 
+        prev_states = states
         results.append((moves, largest_tile(board), score))
         times -= 1
 
@@ -92,7 +92,7 @@ def run(ai_function, times=1,  **kws):
 
 startTime = time.time() # start the timer
 
-results = run(random_ai,1000, size=4)
+results = run(random_ai,1000000, size=4)
 
 print('Highscore =    ' + str(max([res[1] for res in results] )))
 print_to_file(results)  # print to file

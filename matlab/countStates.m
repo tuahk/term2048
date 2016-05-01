@@ -3,11 +3,14 @@ clc;
 
 format shortG
 
-filename = 'states_50k_r1.csv';
+filename = '/Users/Ajrok/Dropbox/ML-project/states/states_512_1M_r2.csv';
 M = csvread(filename,0,0);
 
+goal = 512
 runs = length(M)
 numberOfStates = M(end,1)
+possibleStates = 16*log2(goal) + log2(goal)^16
+discoveredPart = numberOfStates/possibleStates
 
 %% Analyse All
 initSize = 1000;    % the size of data we fit linear function to
