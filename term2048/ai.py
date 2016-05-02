@@ -18,8 +18,7 @@ import time
 
 from game import Game
 from board import Board
-
-import players
+from players import AI
 
 def get_state(board):
     """
@@ -32,11 +31,6 @@ def largest_tile(board):
     """ Returns the value of the largest tile at board """
     return max(get_state(board))
 
-def random_ai(board, score):
-    moves = [Board.UP, Board.DOWN, Board.LEFT, Board.RIGHT]
-    r = random.randint(0,3)
-    #time.sleep(0.2)
-    return moves[r]
 
 # Print results to file
 def print_to_file(results):
@@ -57,6 +51,8 @@ def run_gui(ai_function, **kws):
 
 def run(ai_function, times=1,  **kws):
     results = []
+    states_encountered = {}
+    prev_states = 0
     while(times > 0):
         score = 0
         moves = 0
@@ -64,18 +60,21 @@ def run(ai_function, times=1,  **kws):
         while True:
             if board.won() or not board.canMove():
                 break
+
             move = ai_function(board,score)
             score += board.move(move)
             moves += 1
 
         results.append((moves, largest_tile(board), score))
         times -= 1
-
     return results
 
 startTime = time.time() # start the timer
+size_of_board = 2 # Define board size here
 
-results = run(players.biasRandom_ai,10000, size=4)
+ai = AI(size_of_board)
+results = run(ai.q_learning_ai,500, size=size_of_board)
+#ai.print_states()
 
 print('Highscore =    ' + str(max([res[1] for res in results] )))
 print_to_file(results)  # print to file
