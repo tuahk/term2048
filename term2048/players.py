@@ -4,6 +4,7 @@ import random
 class AI:
     
     def __init__(self,size):
+        self.size = size
         self.prev_state = str((size*size)*[0]) 
         self.prev_score = 0  
         self.prev_move = 0
@@ -42,6 +43,11 @@ class AI:
             return Board.RIGHT
 
     def q_learning_ai(self,board, score):
+        if score==0 and self.prev_score!=0:
+            self.prev_state = str((self.size*self.size)*[0]) 
+            self.prev_score = 0  
+            self.prev_move = 0            
+
         new_state = str(self.get_state(board))
         r = score - self.prev_score
 
@@ -53,7 +59,7 @@ class AI:
         move = 0
         if new_state in self.states:
             if random.uniform(0,1) < epsilon:
-                move = self.states[new_state].index(max(self.states[new_state]))
+                move = moves[self.states[new_state].index(max(self.states[new_state]))]
             else:
                 move = moves[random.randint(0,3)]
         else:

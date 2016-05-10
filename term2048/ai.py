@@ -73,8 +73,8 @@ startTime = time.time() # start the timer
 size_of_board = 2 # Define board size here
 
 ai = AI(size_of_board)
-results = run(ai.q_learning_ai,500, size=size_of_board)
-#ai.print_states()
+results = run(ai.q_learning_ai,50, size=size_of_board)
+ai.print_states()
 
 print('Highscore =    ' + str(max([res[1] for res in results] )))
 print_to_file(results)  # print to file
