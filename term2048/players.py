@@ -68,9 +68,6 @@ class AI:
 
         if random.uniform(0,1) < epsilon:
             move = moves[outputs.index(max(outputs))]
-            #print 'move', move
-            #print 'output', outputs.index(max(outputs))
-            #print outputs
         else:
             move = moves[random.randint(0,3)]
 
@@ -86,7 +83,7 @@ class AI:
         self.prev_move = move
         self.prev_score = score
         self.prev_qvalue = outputs[move-1]
-        #print 'move', move
+        
         return move
     
     def print_states(self):
