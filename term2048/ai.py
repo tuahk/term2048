@@ -19,6 +19,7 @@ import time
 from game import Game
 from board import Board
 from players import AI
+from neuralnetwork import NeuralNetwork
 
 def get_state(board):
     """
@@ -49,7 +50,7 @@ def run_gui(ai_function, **kws):
     game = Game(**kws)
     game.ai_loop(ai_function)
 
-def run(ai_function, times=1,  **kws):
+def run(ai_function, times=1, nn = None, **kws):
     results = []
     states_encountered = {}
     prev_states = 0
@@ -61,7 +62,7 @@ def run(ai_function, times=1,  **kws):
             if board.won() or not board.canMove():
                 break
 
-            move = ai_function(board,score)
+            move = ai_function(board,score, nn)
             score += board.move(move)
             moves += 1
 
@@ -73,8 +74,12 @@ startTime = time.time() # start the timer
 size_of_board = 2 # Define board size here
 
 ai = AI(size_of_board)
-results = run(ai.q_learning_ai,500, size=size_of_board)
-#ai.print_states()
+nn = NeuralNetwork(num_inputs = size_of_board*size_of_board, num_hidden = size_of_board*size_of_board, num_outputs = 4, hidden_layer_weights = None, hidden_layer_bias = None, output_layer_weights = None, output_layer_bias = None)
+
+#nn.inspect()
+results = run(ai.q_learning_ai, 1000, nn, size=size_of_board) 
+#nn.inspect()    
+# ai.print_states()
 
 print('Highscore =    ' + str(max([res[1] for res in results] )))
 print_to_file(results)  # print to file
