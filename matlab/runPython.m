@@ -5,9 +5,9 @@ tic;
 
 % constant parameters
 boardSize = 3;
-goal = 64;
-runs = 1000;
-train = 1;
+goal = 128;
+runs = 5000;
+train = 2;
 alpha = 1;
 gamma = 1;
 epsilon = 0.9;
