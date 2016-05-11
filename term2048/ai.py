@@ -76,6 +76,7 @@ startTime = time.time() # start the timer
 board_size = 2 # Define board size here
 number_of_runs = 50
 goal = 2048
+train = 0
 
 args = sys.argv
 print(len(args))
@@ -92,15 +93,15 @@ if len(args) > 1:
 else:
     ai = AI(board_size)
 
-pkl_file = open('states', 'w+')
 if train == 0 and os.stat('states').st_size!=0:
+    pkl_file = open('states', 'r')
     ai.states = pickle.load(pkl_file)
-
     
 results = run(ai.q_learning_ai,number_of_runs, goal=goal, size=board_size)
 ai.print_states()
 
 if train != 0:
+    pkl_file = open('states', 'w+')
     pickle.dump(ai.states, pkl_file, pickle.HIGHEST_PROTOCOL)
 pkl_file.close()
 
