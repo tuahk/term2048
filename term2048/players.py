@@ -3,7 +3,7 @@ import random
 
 class AI:
     
-    def __init__(self,size, train = True, alpha = 0.005, gamma = 1, epsilon = 0.6 ):
+    def __init__(self,size, train = 1, alpha = 0.005, gamma = 1, epsilon = 0.6 ):
         self.size = size
         self.prev_state = str((size*size)*[0]) 
         self.prev_score = 0  
@@ -11,6 +11,7 @@ class AI:
         self.states = {}
         self.states[self.prev_state] = self.init_state(0,0.2)
         
+        self.train = train
         self.gamma = gamma
         self.alpha = alpha
         self.epsilon = epsilon
@@ -65,10 +66,11 @@ class AI:
         else:
             move = moves[random.randint(0,3)]
             self.states[new_state] = self.init_state(0,0.2)
-
+        
+        if self.train != 0:
         # This is the update rule. ( minus 1 from self.prev_move to correct indexing) 
-        best_move = max(self.states[new_state]) 
-        self.states[self.prev_state][self.prev_move-1] += self.alpha*(r + self.gamma*best_move - self.states[self.prev_state][self.prev_move-1])
+            best_move = max(self.states[new_state]) 
+            self.states[self.prev_state][self.prev_move-1] += self.alpha*(r + self.gamma*best_move - self.states[self.prev_state][self.prev_move-1])
 
         self.prev_state = new_state
         self.prev_move = move
