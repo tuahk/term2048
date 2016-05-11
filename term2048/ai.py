@@ -19,6 +19,8 @@ import time
 from game import Game
 from board import Board
 from players import AI
+import pickle
+import os.path
 
 def get_state(board):
     """
@@ -72,9 +74,17 @@ def run(ai_function, times=1,  **kws):
 startTime = time.time() # start the timer
 size_of_board = 2 # Define board size here
 
+
 ai = AI(size_of_board)
-results = run(ai.q_learning_ai,50, size=size_of_board)
-ai.print_states()
+pkl_file = open('states', 'w+')
+if os.stat('states').st_size!=0:
+    ai.states = pickle.load(pkl_file)
+     
+results = run(ai.q_learning_ai,1000, size=size_of_board)
+#ai.print_states()
+
+pickle.dump(ai.states, pkl_file, pickle.HIGHEST_PROTOCOL)
+pkl_file.close()
 
 print('Highscore =    ' + str(max([res[1] for res in results] )))
 print_to_file(results)  # print to file
