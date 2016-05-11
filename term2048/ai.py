@@ -90,10 +90,10 @@ if len(args) > 1:
 #    print(board_size,number_of_runs,train,alpha,gamma,epsilon)
     ai = AI(board_size, train, alpha, gamma ,epsilon)
 else:
-    ai = AI(size_of_board)
+    ai = AI(board_size)
 
 pkl_file = open('states', 'w+')
-if train == 0:
+if train == 0 and os.stat('states').st_size!=0:
     ai.states = pickle.load(pkl_file)
 
     
