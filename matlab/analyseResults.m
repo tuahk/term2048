@@ -7,18 +7,21 @@ filename = 'results.csv';
 M = csvread(filename,1,0);
 runs = length(M)
 
-%% General analysis
+%% General analysis - of last 10%
 
-Moves = [min(M(:,1)); median(M(:,1)); max(M(:,1)); mean(M(:,1)); std(M(:,1))];
-Score = [min(M(:,3)); median(M(:,3)); max(M(:,3)); mean(M(:,3)); std(M(:,3))];
-maxTile = [min(M(:,2)); median(M(:,2)); max(M(:,2)); mean(M(:,2)); std(M(:,2))];
+Moves = [min(M(runs*0.9:end,1)); median(M(runs*0.9:end,1)); max(M(runs*0.9:end,1)); mean(M(runs*0.9:end,1)); std(M(runs*0.9:end,1))];
+Score = [min(M(runs*0.9:end,3)); median(M(runs*0.9:end,3)); max(M(runs*0.9:end,3)); mean(M(runs*0.9:end,3)); std(M(runs*0.9:end,3))];
+maxTile = [min(M(runs*0.9:end,2)); median(M(runs*0.9:end,2)); max(M(runs*0.9:end,2)); mean(M(runs*0.9:end,2)); std(M(runs*0.9:end,2))];
 
 rows = {'Min';'Med';'Max';'Avg';'Std'};
 T = table(Moves,Score,maxTile,'RowNames',rows)
 
 figure(1)
-histogram(M(:,3),100)
+H = histogram(M(:,3),'BinWidth',5);
 xlim([Score(1) Score(3)])
+
+% Write to .csv file
+% csvwrite('randomAll.csv',[H.BinEdges(2:end)'-25 H.Values'])
 
 %% Per max tile analysis
 
@@ -41,14 +44,36 @@ R = table(v,n,p,'VariableNames',columns)
 figure(2)
 clf
 xlim([Score(1) Score(3)])
-bins = 10;
+binWidth = 5;
 hold on
-histogram(F32(:,3),bins)
-histogram(F64(:,3),bins)
-histogram(F128(:,3),bins)
-histogram(F256(:,3),bins)
+histogram(F8(:,3),'BinWidth',binWidth);
+histogram(F16(:,3),'BinWidth',binWidth);
+histogram(F32(:,3),'BinWidth',binWidth);
+histogram(F64(:,3),'BinWidth',binWidth);
+histogram(F128(:,3),'BinWidth',binWidth);
+histogram(F256(:,3),'BinWidth',binWidth);
 hold off
-legend('max tile: 32','max tile: 64','max tile: 128','max tile: 256')
+legend('max tile: 8','max tile: 16','max tile: 32','max tile: 64','max tile: 128','max tile: 256')
 
+% Write to .csv file
+% csvwrite('random32.csv',[H32.BinEdges(2:end)'-25 H32.Values'])
+% csvwrite('random64.csv',[H64.BinEdges(2:end)'-25 H64.Values'])
+% csvwrite('random128.csv',[H128.BinEdges(2:end)'-25 H128.Values'])
+% csvwrite('random256.csv',[H256.BinEdges(2:end)'-25 H256.Values'])
 
+%% Advancement analysis
 
+windowSize = 500;  % interval size for average
+y = filter((1/windowSize)*ones(1,windowSize),1,M(:,3));
+
+X = linspace(windowSize,runs,runs-windowSize+1);
+Y = y(windowSize:end);
+
+firstAverage = Y(1)
+lastAverage = Y(end)
+ratio = lastAverage/firstAverage
+
+figure(3)
+plot(X,Y)
+xlabel('runs')
+ylabel('score')
