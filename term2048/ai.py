@@ -96,12 +96,13 @@ pkl_file = open('states', 'w+')
 if train == 0:
     ai.states = pickle.load(pkl_file)
 
-if train != 0:
-    pickle.dump(ai.states, pkl_file, pickle.HIGHEST_PROTOCOL)
-pkl_file.close()
     
 results = run(ai.q_learning_ai,number_of_runs, goal=goal, size=board_size)
 ai.print_states()
+
+if train != 0:
+    pickle.dump(ai.states, pkl_file, pickle.HIGHEST_PROTOCOL)
+pkl_file.close()
 
 print('Highscore =    ' + str(max([res[1] for res in results] )))
 print_to_file(results)  # print to file
