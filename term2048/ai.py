@@ -15,10 +15,13 @@ from __future__ import print_function   # import print() for printing to file
 
 import random
 import time
+import sys
 
 from game import Game
 from board import Board
 from players import AI
+import pickle
+import os.path
 
 def get_state(board):
     """
@@ -70,11 +73,35 @@ def run(ai_function, times=1,  **kws):
     return results
 
 startTime = time.time() # start the timer
-size_of_board = 2 # Define board size here
+board_size = 2 # Define board size here
+number_of_runs = 50
+goal = 2048
 
-ai = AI(size_of_board)
-results = run(ai.q_learning_ai,50, size=size_of_board)
+args = sys.argv
+print(len(args))
+if len(args) > 1:
+    board_size = int(args[1])
+    number_of_runs = int(args[2])
+    train = int(args[3]) # 0 for NO and 1 for YES
+    alpha = float(args[4])
+    gamma = float(args[5])
+    epsilon = float(args[6])
+    goal = int(args[7])
+#    print(board_size,number_of_runs,train,alpha,gamma,epsilon)
+    ai = AI(board_size, train, alpha, gamma ,epsilon)
+else:
+    ai = AI(size_of_board)
+
+results = run(ai.q_learning_ai,number_of_runs, goal=goal, size=board_size)
 ai.print_states()
+
+
+#pkl_file = open('states', 'w+')
+#if os.stat('states').st_size!=0:
+#    ai.states = pickle.load(pkl_file)
+
+#pickle.dump(ai.states, pkl_file, pickle.HIGHEST_PROTOCOL)
+#pkl_file.close()
 
 print('Highscore =    ' + str(max([res[1] for res in results] )))
 print_to_file(results)  # print to file

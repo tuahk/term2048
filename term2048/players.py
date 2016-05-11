@@ -3,13 +3,18 @@ import random
 
 class AI:
     
-    def __init__(self,size):
+    def __init__(self,size, train = 1, alpha = 0.005, gamma = 1, epsilon = 0.6 ):
         self.size = size
         self.prev_state = str((size*size)*[0]) 
         self.prev_score = 0  
         self.prev_move = 0
         self.states = {}
         self.states[self.prev_state] = self.init_state(0,0.2)
+        
+        self.train = train
+        self.gamma = gamma
+        self.alpha = alpha
+        self.epsilon = epsilon
     
     def init_state(self,a,b):
         return [random.uniform(a,b),random.uniform(a,b),random.uniform(a,b),random.uniform(a,b)]
@@ -51,24 +56,21 @@ class AI:
         new_state = str(self.get_state(board))
         r = score - self.prev_score
 
-        gamma = 1 #0.85 
-        alpha = 0.005
-        epsilon = 0.9
-
         moves = [Board.UP, Board.DOWN, Board.LEFT, Board.RIGHT]
         move = 0
         if new_state in self.states:
-            if random.uniform(0,1) < epsilon:
+            if random.uniform(0,1) < self.epsilon:
                 move = moves[self.states[new_state].index(max(self.states[new_state]))]
             else:
                 move = moves[random.randint(0,3)]
         else:
             move = moves[random.randint(0,3)]
             self.states[new_state] = self.init_state(0,0.2)
-
+        
+        if self.train != 0:
         # This is the update rule. ( minus 1 from self.prev_move to correct indexing) 
-        best_move = max(self.states[new_state]) 
-        self.states[self.prev_state][self.prev_move-1] += alpha*(r + gamma*best_move - self.states[self.prev_state][self.prev_move-1])
+            best_move = max(self.states[new_state]) 
+            self.states[self.prev_state][self.prev_move-1] += self.alpha*(r + self.gamma*best_move - self.states[self.prev_state][self.prev_move-1])
 
         self.prev_state = new_state
         self.prev_move = move
