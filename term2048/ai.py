@@ -92,13 +92,13 @@ if len(args) > 1:
 else:
     ai = AI(size_of_board)
 
-if (train == 0):
-    pkl_file = open('states', 'w+')
-    if os.stat('states').st_size!=0:
-        ai.states = pickle.load(pkl_file)
-    
+pkl_file = open('states', 'w+')
+if train == 0:
+    ai.states = pickle.load(pkl_file)
+
+if train != 0:
     pickle.dump(ai.states, pkl_file, pickle.HIGHEST_PROTOCOL)
-    pkl_file.close()
+pkl_file.close()
     
 results = run(ai.q_learning_ai,number_of_runs, goal=goal, size=board_size)
 ai.print_states()
