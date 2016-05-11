@@ -15,6 +15,7 @@ from __future__ import print_function   # import print() for printing to file
 
 import random
 import time
+import sys
 
 from game import Game
 from board import Board
@@ -71,9 +72,22 @@ def run(ai_function, times=1,  **kws):
 
 startTime = time.time() # start the timer
 size_of_board = 2 # Define board size here
+number_of_runs = 50
 
-ai = AI(size_of_board)
-results = run(ai.q_learning_ai,50, size=size_of_board)
+args = sys.argv
+if len(args) > 1:
+    board_size = args[1]
+    number_of_runs = args[2]
+    train = args[3] # 0 for NO and 1 for YES
+    alpha = args[4]
+    gamma = args[5]
+    epsilon = args[6]
+#    print(board_size,number_of_runs,train,alpha,gamma,epsilon)
+    ai = AI(size_of_board, train, alpha, gamma ,epsilon)
+else:
+    ai = AI(size_of_board)
+
+results = run(ai.q_learning_ai,number_of_runs, size=size_of_board)
 ai.print_states()
 
 print('Highscore =    ' + str(max([res[1] for res in results] )))
