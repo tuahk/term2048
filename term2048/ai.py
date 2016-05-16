@@ -97,15 +97,15 @@ else:
     ai = AI(board_size)
 
 
-if train == 0 and os.stat('states').st_size!=0:
-    pkl_file = open('states', 'r')
-    ai.states = pickle.load(pkl_file)
-    pkl_file.close()
+#if train == 0 and os.stat('states').st_size!=0:
+#    pkl_file = open('states', 'r')
+#    ai.states = pickle.load(pkl_file)
+#    pkl_file.close()
 
-if train != 0:
-    pkl_file = open('states', 'w')
-    pickle.dump(ai.states, pkl_file, pickle.HIGHEST_PROTOCOL)
-    pkl_file.close()
+#if train != 0:
+#    pkl_file = open('states', 'w')
+#    pickle.dump(ai.states, pkl_file, pickle.HIGHEST_PROTOCOL)
+#    pkl_file.close()
 
     
 results = run(ai.q_learning_ai,number_of_runs, goal=goal, size=board_size)
