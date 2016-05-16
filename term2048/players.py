@@ -1,6 +1,10 @@
 from board import Board
 import random
 
+from pybrain.structure import FeedForwardNetwork
+from pybrain.structure import LinearLayer, SigmoidLayer
+from pybrain.structure import FullConnection
+
 class AI:
     
     def __init__(self,size, train = 1, alpha = 0.005, gamma = 1, epsilon = 0.6 ):
@@ -15,6 +19,29 @@ class AI:
         self.gamma = gamma
         self.alpha = alpha
         self.epsilon = epsilon
+        
+        #   Network configuration    
+        self.n = self.init_network(size)
+        
+    def init_network(self, size):
+        n = FeedForwardNetwork()
+        inLayer = LinearLayer(size*size)
+        hiddenLayer = SigmoidLayer(size^size)
+        outLayer = LinearLayer(4)
+
+        n.addInputModule(inLayer)
+        n.addModule(hiddenLayer)
+        n.addOutputModule(outLayer)
+
+        in_to_hidden = FullConnection(inLayer, hiddenLayer)
+        hidden_to_out = FullConnection(hiddenLayer, outLayer) 
+        
+        n.addConnection(in_to_hidden)
+        n.addConnection(hidden_to_out) 
+        
+        n.sortModules()
+        
+        return n
     
     def init_state(self,a,b):
         return [random.uniform(a,b),random.uniform(a,b),random.uniform(a,b),random.uniform(a,b)]
@@ -47,7 +74,7 @@ class AI:
         else:
             return Board.RIGHT
 
-    def q_learning_ai(self,board, score):
+    def q_learning_ai(self,board, score, n = None):
         if score==0 and self.prev_score!=0:
             self.prev_state = str((self.size*self.size)*[0]) 
             self.prev_score = 0  
@@ -56,11 +83,14 @@ class AI:
         new_state = str(self.get_state(board))
         r = score - self.prev_score
 
+        outputs = self.n.activate(self.get_state(board))
+        print outputs
+
         moves = [Board.UP, Board.DOWN, Board.LEFT, Board.RIGHT]
         move = 0
         if new_state in self.states:
             if random.uniform(0,1) < self.epsilon:
-                move = moves[self.states[new_state].index(max(self.states[new_state]))]
+                move = moves[outputs.index(max(outputs))]
             else:
                 move = moves[random.randint(0,3)]
         else:
