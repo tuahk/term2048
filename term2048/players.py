@@ -34,7 +34,8 @@ class AI:
         
     def init_network(self):
         n = FeedForwardNetwork()
-        inLayer = LinearLayer(4)
+        inLayer = LinearLayer(self.size*self.size)
+#           Define number of hidden layer here 
         hiddenLayer = SigmoidLayer(30)
         outLayer = LinearLayer(4)
 
