@@ -95,6 +95,7 @@ if len(args) > 1:
     gamma = float(args[5])
     epsilon = float(args[6])
     goal = int(args[7])
+    start_clean = int(args[8])
 #    print(board_size,number_of_runs,train,alpha,gamma,epsilon)
     ai = AI(board_size, train, alpha, gamma ,epsilon,goal)
 else:
