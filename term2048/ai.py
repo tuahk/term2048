@@ -61,22 +61,28 @@ def run(ai_function, times=1,  **kws):
         moves = 0
         board = Board(**kws)
         while True:
-            if board.won() or not board.canMove():
-                break
+
 
             move = ai_function(board,score)
             score += board.move(move)
             moves += 1
+
+            if board.won() or not board.canMove():
+                move = ai_function(board,score)
+                break
 
         results.append((moves, largest_tile(board), score))
         times -= 1
     return results
 
 startTime = time.time() # start the timer
-board_size = 2 # Define board size here
-number_of_runs = 50
-goal = 2048
+board_size = 3 # Define board size here
+number_of_runs = 10
+goal = 32
 train = 1
+alpha = 0.6
+gamma = 1
+epsilon = 0.85
 
 args = sys.argv
 print(len(args))
@@ -96,7 +102,7 @@ else:
 if train == 0 and os.stat('states').st_size!=0:
     pkl_file = open('states', 'r')
     ai.states = pickle.load(pkl_file)
-    
+
 results = run(ai.q_learning_ai,number_of_runs, goal=goal, size=board_size)
 ai.print_states()
 
