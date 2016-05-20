@@ -1,5 +1,5 @@
 %% Machine Learning - Project - Analyse results
-clc;
+%clc;
 
 format shortG
 
