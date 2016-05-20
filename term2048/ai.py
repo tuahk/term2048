@@ -99,7 +99,7 @@ if len(args) > 1:
 #    print(board_size,number_of_runs,train,alpha,gamma,epsilon)
     ai = AI(board_size, train, alpha, gamma ,epsilon,goal)
 else:
-     ai = AI(board_size, train, alpha, gamma ,epsilon,goal)
+    ai = AI(board_size, train, alpha, gamma ,epsilon,goal)
 
 if (train == 0 or start_clean == 0) and os.stat('states').st_size!=0:
     pkl_file = open('states', 'r')
