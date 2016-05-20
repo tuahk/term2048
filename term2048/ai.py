@@ -80,6 +80,7 @@ board_size = 3 # Define board size here
 number_of_runs = 10
 goal = 32
 train = 1
+start_clean = 1
 alpha = 0.6
 gamma = 1
 epsilon = 0.85
@@ -99,7 +100,7 @@ if len(args) > 1:
 else:
      ai = AI(board_size, train, alpha, gamma ,epsilon,goal)
 
-if train == 0 and os.stat('states').st_size!=0:
+if (train == 0 or start_clean == 0) and os.stat('states').st_size!=0:
     pkl_file = open('states', 'r')
     ai.states = pickle.load(pkl_file)
 
