@@ -63,17 +63,18 @@ legend('max tile: 8','max tile: 16','max tile: 32','max tile: 64','max tile: 128
 
 %% Advancement analysis
 
-windowSize = 500;  % interval size for average
+windowSize = 5000;  % interval size for average
 y = filter((1/windowSize)*ones(1,windowSize),1,M(:,3));
 
 X = linspace(windowSize,runs,runs-windowSize+1);
 Y = y(windowSize:end);
 
-firstAverage = Y(1)
-lastAverage = Y(end)
-ratio = lastAverage/firstAverage
+%% Reduce
+xReduced = X;
+yReduced = Y;
+%[xReduced, yReduced] = reduceData(X,Y,1000);
 
 figure(3)
-plot(X,Y)
+plot(xReduced,yReduced)
 xlabel('runs')
 ylabel('score')
