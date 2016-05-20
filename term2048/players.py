@@ -56,7 +56,6 @@ class AI:
             self.prev_move = 0
 
         new_state = str(self.get_state(board))
-#        r = score - self.prev_score
         if self.largest_tile(board) == self.goal:
            r = self.largest_tile(board)
         else:
