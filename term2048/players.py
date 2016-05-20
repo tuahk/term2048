@@ -3,7 +3,7 @@ import random
 
 class AI:
     
-    def __init__(self,size, train = 1, alpha = 0.005, gamma = 1, epsilon = 0.6 ):
+    def __init__(self,size, train = 1, alpha = 0.005, gamma = 1, epsilon = 0.6 ,goal = 2048):
         self.size = size
         self.prev_state = str((size*size)*[0]) 
         self.prev_score = 0  
@@ -15,6 +15,7 @@ class AI:
         self.gamma = gamma
         self.alpha = alpha
         self.epsilon = epsilon
+        self.goal = goal
     
     def init_state(self,a,b):
         return [random.uniform(a,b),random.uniform(a,b),random.uniform(a,b),random.uniform(a,b)]
@@ -28,7 +29,7 @@ class AI:
     
     def largest_tile(self, board):
         """ Returns the value of the largest tile at board """
-        return max(get_state(board))
+        return max(self.get_state(board))
     
     def random_ai(self,board, score):
         moves = [Board.UP, Board.DOWN, Board.LEFT, Board.RIGHT]
@@ -54,7 +55,11 @@ class AI:
             self.prev_move = 0            
 
         new_state = str(self.get_state(board))
-        r = score - self.prev_score
+#        r = score - self.prev_score
+        if self.largest_tile(board) == self.goal:
+           r = self.largest_tile(board)
+        else:
+           r = 0
 
         moves = [Board.UP, Board.DOWN, Board.LEFT, Board.RIGHT]
         move = 0

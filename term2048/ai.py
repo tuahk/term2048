@@ -76,7 +76,7 @@ startTime = time.time() # start the timer
 board_size = 2 # Define board size here
 number_of_runs = 50
 goal = 2048
-train = 0
+train = 1
 
 args = sys.argv
 print(len(args))
@@ -89,7 +89,7 @@ if len(args) > 1:
     epsilon = float(args[6])
     goal = int(args[7])
 #    print(board_size,number_of_runs,train,alpha,gamma,epsilon)
-    ai = AI(board_size, train, alpha, gamma ,epsilon)
+    ai = AI(board_size, train, alpha, gamma ,epsilon,goal)
 else:
     ai = AI(board_size)
 
