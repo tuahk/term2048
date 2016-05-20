@@ -1,5 +1,5 @@
 %% Machine Learning - Project - Analyse results
-clc;
+%clc;
 
 format shortG
 
@@ -68,10 +68,6 @@ y = filter((1/windowSize)*ones(1,windowSize),1,M(:,3));
 
 X = linspace(windowSize,runs,runs-windowSize+1);
 Y = y(windowSize:end);
-
-firstAverage = Y(1)
-lastAverage = Y(end)
-ratio = lastAverage/firstAverage
 
 figure(3)
 plot(X,Y)

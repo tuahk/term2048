@@ -1,36 +1,45 @@
 %% Run Python script
 clear;
 clc;
-tic;
+t0 = tic;
 
 % constant parameters
 boardSize = 3;
 goal = 128;
-runs = 5000;
+trainRuns = 500000;
+testRuns = 50000;
 train = 2;
-alpha = 1;
-gamma = 1;
-epsilon = 0.9;
+alpha = 0.13;   % 0.0001 - 1.0
+gamma = 1;      % 0.1    - 1.0
+epsilon = 0.85; % 0.1    - 0.95
 
 % variable parameters
-Alpha = 0.1:0.1:1;
+len = 50
+variable = linspace(0.01,1,len);
 
 % results
-Ratio = zeros(length(Alpha),1);
-Score = zeros(length(Alpha),1); 
+Ratio = zeros(len,1);
+Score = zeros(len,1); 
 
 % run
-for i = 1:length(Alpha)
-    disp(i)
-    alpha = Alpha(i);
-    [Ratio(i),Score(i)] = runQLearning(boardSize,goal,runs,train,alpha,gamma,epsilon);
+parfor i = 1:len
+    t1 = tic;
+    alpha = variable(i);
+    [Ratio(i),Score(i)] = runQLearning(boardSize,goal,trainRuns,testRuns,train,alpha,gamma,epsilon)
+    disp(toc(t1))
 end
 
-% plot
+%% Plot
 figure(1)
-plot(Alpha,Ratio);
+plot(variable,Ratio,'o-');
+grid on
+xlabel('variable')
+ylabel('ratio of winning states')
 
 figure(2)
-plot(Alpha,Score);
+plot(variable,Score,'o-');
+grid on
+xlabel('variable')
+ylabel('average score')
 
-toc
+toc(t0)

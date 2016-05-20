@@ -1,11 +1,12 @@
-function [r,a] = runQLearning(boardSize,goal,runs,train,alpha,gamma,epsilon)
+function [r,a] = runQLearning(boardSize,goal,trainRuns,testRuns,train,alpha,gamma,epsilon)
 %runQLearning runs the python script with Q-Learning algorithm
 %
-%   r = runQLearning(boardSize,goal,runs,train,alpha,gamma,epsilon)
+%   [r,a] = runQLearning(boardSize,goal,trainRuns,testRuns,train,alpha,gamma,epsilon)
 %
 %   boardSize = the size of the 2048 game board
 %   goal      = the goal after which we stop the game
-%   runs      = number of runs
+%   trainRuns = number of runs training
+%   testRuns  = number of runs testing
 %   train     = 0 -> no, only test
 %               1 -> yes, test simultaneously
 %               2 -> both (first train and then test)
@@ -26,10 +27,20 @@ function [r,a] = runQLearning(boardSize,goal,runs,train,alpha,gamma,epsilon)
 location = '/Users/Ajrok/Documents/MATLAB/MachineLearning/Project/term2048/term2048';
 filename = '/ai.py';
 
-if train ~= 2
+if train == 0
     commandStr = strcat('python',{' '},location,filename);
     commandStr = strcat(commandStr,{' '},num2str(boardSize));
-    commandStr = strcat(commandStr,{' '},num2str(runs));
+    commandStr = strcat(commandStr,{' '},num2str(testRuns));
+    commandStr = strcat(commandStr,{' '},num2str(train));
+    commandStr = strcat(commandStr,{' '},num2str(alpha));
+    commandStr = strcat(commandStr,{' '},num2str(gamma));
+    commandStr = strcat(commandStr,{' '},num2str(epsilon));
+    commandStr = strcat(commandStr,{' '},num2str(goal));
+    [~,~] = system(commandStr{1});
+elseif train == 1
+    commandStr = strcat('python',{' '},location,filename);
+    commandStr = strcat(commandStr,{' '},num2str(boardSize));
+    commandStr = strcat(commandStr,{' '},num2str(trainRuns));
     commandStr = strcat(commandStr,{' '},num2str(train));
     commandStr = strcat(commandStr,{' '},num2str(alpha));
     commandStr = strcat(commandStr,{' '},num2str(gamma));
@@ -40,7 +51,7 @@ else
     train = 1;
     commandStr = strcat('python',{' '},location,filename);
     commandStr = strcat(commandStr,{' '},num2str(boardSize));
-    commandStr = strcat(commandStr,{' '},num2str(runs));
+    commandStr = strcat(commandStr,{' '},num2str(trainRuns));
     commandStr = strcat(commandStr,{' '},num2str(train));
     commandStr = strcat(commandStr,{' '},num2str(alpha));
     commandStr = strcat(commandStr,{' '},num2str(gamma));
@@ -50,7 +61,7 @@ else
     train = 0;
     commandStr = strcat('python',{' '},location,filename);
     commandStr = strcat(commandStr,{' '},num2str(boardSize));
-    commandStr = strcat(commandStr,{' '},num2str(runs));
+    commandStr = strcat(commandStr,{' '},num2str(testRuns));
     commandStr = strcat(commandStr,{' '},num2str(train));
     commandStr = strcat(commandStr,{' '},num2str(alpha));
     commandStr = strcat(commandStr,{' '},num2str(gamma));

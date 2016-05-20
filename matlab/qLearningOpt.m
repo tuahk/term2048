@@ -1,4 +1,4 @@
-function r = qLearningOpt(parameters)
+function a = qLearningOpt(boardSize,goal,trainRuns,testRuns,train,parameters,gamma)
 %qLearningOpt runs the runQLearning function with specified parameters
 %
 %   r = qLearningOpt(parameters)
@@ -13,13 +13,8 @@ function r = qLearningOpt(parameters)
 %   r         = ratio between times goal is achieved and number of runs
 %   a         = average score
 
-
-boardSize = 3;
-goal = 128;
-runs = 5000;
-train = 2;
 alpha = parameters(1);
-gamma = parameters(2);
-epsilon = parameters(3);
+%gamma = parameters(2);
+epsilon = parameters(2);
 
-[r,~] = runQLearning(boardSize,goal,runs,train,alpha,gamma,epsilon);
+[~,a] = runQLearning(boardSize,goal,trainRuns,testRuns,train,alpha,gamma,epsilon);
